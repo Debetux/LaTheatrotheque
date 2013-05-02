@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database', 'session', 'encrypt');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'assets');
+$autoload['helper'] = array('url', 'assets', 'language');
 
 
 /*
@@ -96,7 +96,7 @@ $autoload['config'] = array();
 |
 */
 
-$autoload['language'] = array();
+$autoload['language'] = array('auth');
 
 
 /*

@@ -2,15 +2,23 @@
 
 class Auth extends CI_Controller {
 
+	function __construct()
+	{
+		parent::__construct();
+
+		//  Chargement de la bibliothèque
+		$this->load->helper('captcha');
+		$this->load->library('ion_auth');
+		$this->load->library('form_validation');
+		$this->load->model('auth_model', 'authManager');
+		
+		$this->load->database();
+	}
 
 	public function sign_up()
 	{
-		//  Chargement de la bibliothèque
-		$this->load->library('form_validation');
-		$this->load->helper('assets');
-		$this->load->helper('captcha');
-		$this->load->model('auth_model', 'authManager');
-
+		
+		// CAPTCHA
 		$vals = array(
 			'img_path' => './captcha/',
 			'img_url' => base_url().'captcha/',
