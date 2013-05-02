@@ -64,8 +64,44 @@ class Auth extends CI_Controller {
 			$this->load->view('auth/sign_up_form', $data);
 			$this->load->view('templates/footer');
 		}
-		
-		
-		
+	}
+
+	public function login(){
+		//  Chargement de la bibliothèque
+		$this->load->library('form_validation');
+		$this->load->helper('assets');
+		$this->load->model('auth_model', 'authManager');
+
+		// Données
+		$this->form_validation->set_error_delimiters('<small class="error">', '</small>');
+		$this->form_validation->set_rules('username', 'identifiant', 'trim|required|min_length[5]|max_length[52]|alpha_dash|encode_php_tags|xss_clean');
+		$this->form_validation->set_rules('password', 'mot de passe', 'required');
+
+		// Validation du formulaire
+		if($this->form_validation->run())
+		{	
+
+			// On stocke les variables
+			$username = $this->input->post('username');
+
+			$password = $this->input->post('password');
+
+			if($this->authManager->verify_user($username, $password)){
+				echo '1';
+			} else{
+				$data['login_failed'] = true;
+				$this->load->view('templates/header');
+				$this->load->view('auth/auth_form', $data);
+				$this->load->view('templates/footer');
+			}
+		}
+		else
+		{
+			$this->load->view('templates/header');
+			//  Le formulaire est invalide ou vide
+			$this->load->view('auth/auth_form');
+			$this->load->view('templates/footer');
+		}
+
 	}
 }
