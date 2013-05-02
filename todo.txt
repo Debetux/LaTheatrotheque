@@ -1,0 +1,9 @@
+
+- Captcha
+
+ION AUTH : 
+- Sécuriser stockage des mots de passe
+- Remember me
+- IP Bans
+- Sessions + secure
+- Forgot password
