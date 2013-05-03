@@ -87,7 +87,9 @@ class Auth extends CI_Controller {
 			$password = $this->input->post('password');
 
 			if($this->authManager->verify_user($username, $password)){
-				echo '1';
+				$this->session->set_userdata('username', $username);
+				redirect('dashboard/', 'refresh');
+
 			} else{
 				$data['login_failed'] = true;
 				$this->load->view('templates/header');
