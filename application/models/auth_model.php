@@ -2,6 +2,7 @@
 class Auth_model extends CI_Model {
 
 	protected $table = 'users';
+	protected $login_attempts_table = 'login_attempts';
 
 	public function __construct()
 	{
@@ -11,7 +12,7 @@ class Auth_model extends CI_Model {
 	}
 
 	public function add_user($username, $email, $first_name, $last_name, $password, $acl_id = '1'){
-		# On chargee la librairie.
+		# On charge la librairie.
 		$this->load->library('PasswordHash');
 		# On initialise l'objet.
 		$pwdHasher = new PasswordHash(8, FALSE);
@@ -34,7 +35,7 @@ class Auth_model extends CI_Model {
 	}
 
 	public function verify_user($username, $password){
-		# On chargee la librairie.
+		# On charge la librairie.
 		$this->load->library('PasswordHash');
 		# On initialise l'objet.
 		$pwdHasher = new PasswordHash(8, FALSE);
@@ -42,9 +43,73 @@ class Auth_model extends CI_Model {
 		# On va chercher le hash du mot de passe stocké dans la base de donnée.
 		$row = $this->db->select('password')->from($this->table)->where(array('username' => $username))->get()->result();
 		
-		$password_stored = $row[0]->password;
+		if(! empty($row[0]->password)) $password_stored = $row[0]->password;
+		else $password_stored = 'null';
 
 		# La magie opère !
 		return $pwdHasher->CheckPassword($password, $password_stored);
+	}
+
+	public function is_banned($parameters = array()){
+		$bantime = 0;
+
+		if(! empty($parameters['username'])):
+			# On va chercher les tentatives fail avec l'username
+			$rows = $this->db->select('*')->from($this->login_attempts_table)->where(array('username' => $parameters['username']))->order_by('time', 'DESC')->get();
+			$nbr_attempts = 0;
+			$last_attempt_user_time = 0;
+			foreach ($rows->result() as $value):
+				$nbr_attempts++; # On incrémente à chaque fois.
+				$last_attempt_user_time = $value->time;
+			endforeach;
+			# On laisse au minimum trois essais ratés. Sinon, le temps double à chaque fois.
+			if($nbr_attempts > 3) $bantime_username = 2*$nbr_attempts*60;
+			else $bantime_username = 0;
+		endif;
+
+		if(! empty($parameters['ip_address'])):
+			# On va chercher les tentatives fail avec l'username
+			$rows = $this->db->select('*')->from($this->login_attempts_table)->where(array('ip_address' => $parameters['ip_address']))->order_by('time', 'DESC')->get();
+			$nbr_attempts = 0;
+			$last_attempt_ip_time = 0;
+			foreach ($rows->result() as $value):
+				$nbr_attempts++;
+				$last_attempt_ip_time = $value->time;
+			endforeach;
+			if($nbr_attempts > 3) $bantime_ip = 2*$nbr_attempts*60;
+			else $bantime_ip = 0;
+		endif;
+
+		if($last_attempt_user_time + $bantime_username > time() AND 
+			$last_attempt_ip_time + $bantime_ip > time() AND 
+			$last_attempt_user_time + $bantime_username == $last_attempt_ip_time + $bantime_ip) 
+			$bantime+= 1;
+		elseif($last_attempt_user_time + $bantime_username < time() AND 
+			$last_attempt_ip_time + $bantime_ip < time()) $bantime = 0;
+		else $bantime = 1;
+
+		
+		if($bantime > 0) return true;
+		else return false;
+
+		/*if($bantime_ip == $bantime_username) return $bantime_username;
+		else return $bantime_username+$bantime_ip;
+
+		if(empty($bantime)) return 0;
+		else return $bantime;*/
+	}
+
+	public function add_attempt($username, $ip_address){
+
+		# On a plus qu'a tout insérer dans la base de donnée.
+		$this->db->set('username',  $username)
+				->set('ip_address', $ip_address);
+
+		$this->db->set('time', time());
+		return $this->db->insert($this->login_attempts_table);
+	}
+
+	public function clear_attempts($params){
+		return $this->db->where($params)->delete($this->login_attempts_table);
 	}
 }

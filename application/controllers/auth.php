@@ -5,11 +5,16 @@ class Auth extends CI_Controller {
 
 	public function sign_up()
 	{
+
 		//  Chargement de la bibliothèque
 		$this->load->library('form_validation');
 		$this->load->helper('assets');
 		$this->load->helper('captcha');
 		$this->load->model('auth_model', 'authManager');
+
+		# Si connecté
+		if($this->session->userdata('username')) 
+			redirect();
 
 		$vals = array(
 			'img_path' => './captcha/',
@@ -72,6 +77,10 @@ class Auth extends CI_Controller {
 		$this->load->helper('assets');
 		$this->load->model('auth_model', 'authManager');
 
+		# Si connecté
+		if($this->session->userdata('username')) 
+			redirect();
+
 		// Données
 		$this->form_validation->set_error_delimiters('<small class="error">', '</small>');
 		$this->form_validation->set_rules('username', 'identifiant', 'trim|required|min_length[5]|max_length[52]|alpha_dash|encode_php_tags|xss_clean');
@@ -83,15 +92,19 @@ class Auth extends CI_Controller {
 
 			// On stocke les variables
 			$username = $this->input->post('username');
-
 			$password = $this->input->post('password');
 
-			if($this->authManager->verify_user($username, $password)){
+			if($this->authManager->verify_user($username, $password) AND ! $this->authManager->is_banned(array('ip_address' => $this->session->userdata('ip_address'), 'username' => $username))){
+				# On initialise la session
 				$this->session->set_userdata('username', $username);
+
+				# On remet à 0 les login fails
+				$this->authManager->clear_attempts(array('ip_address' => $this->session->userdata('ip_address'), 'username' => $username));
 				redirect('dashboard/', 'refresh');
 
 			} else{
 				$data['login_failed'] = true;
+				if(! $this->authManager->is_banned(array('ip_address' => $this->session->userdata('ip_address'), 'username' => $username))) $this->authManager->add_attempt($username, $this->session->userdata('ip_address'));
 				$this->load->view('templates/header');
 				$this->load->view('auth/auth_form', $data);
 				$this->load->view('templates/footer');
@@ -105,5 +118,10 @@ class Auth extends CI_Controller {
 			$this->load->view('templates/footer');
 		}
 
+	}
+
+	public function logout(){
+		$this->session->sess_destroy();
+		redirect();
 	}
 }

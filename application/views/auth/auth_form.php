@@ -48,7 +48,6 @@
 
 			
 		<?php $this->load->view('auth/login_include'); ?>
-		<?php echo anchor('#login', 'Inscription', 'data-reveal-id="signup-box"'); ?>
 
 		        
 		</div>
