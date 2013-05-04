@@ -2,6 +2,9 @@
 
 class Auth extends CI_Controller {
 
+	public function index(){
+		redirect('auth/login');
+	}
 
 	public function sign_up()
 	{
@@ -93,7 +96,7 @@ class Auth extends CI_Controller {
 			// On stocke les variables
 			$username = $this->input->post('username');
 			$password = $this->input->post('password');
-			$remember_me = (empty($this->input->post('remember_me')) ? false : true);
+			$remember_me = ($this->input->post('remember_me') == null ? false : true);
 
 			if($this->authManager->verify_user($username, $password) AND ! $this->authManager->is_banned(array('ip_address' => $this->session->userdata('ip_address'), 'username' => $username))){
 				# On initialise la session
@@ -103,7 +106,7 @@ class Auth extends CI_Controller {
 				$this->authManager->clear_attempts(array('ip_address' => $this->session->userdata('ip_address'), 'username' => $username));
 
 				$this->load->helper('string');
-				
+
 				# Si le remember me est coché
 				if($remember_me){
 					$remember_me_hash = $username.'--'.random_string('numeric', 128);

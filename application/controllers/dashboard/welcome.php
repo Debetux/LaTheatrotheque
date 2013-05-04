@@ -25,7 +25,7 @@ class Welcome extends CI_Controller {
 		$data['cap'] = create_captcha($vals);
 
 		$this->load->view('templates/header');
-		$this->load->view('welcome_message', $data);
+		$this->load->view('dashboard/welcome', $data);
 		$this->load->view('templates/footer');
 	}
 }
