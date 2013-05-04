@@ -93,6 +93,7 @@ class Auth extends CI_Controller {
 			// On stocke les variables
 			$username = $this->input->post('username');
 			$password = $this->input->post('password');
+			$remember_me = (empty($this->input->post('remember_me')) ? false : true);
 
 			if($this->authManager->verify_user($username, $password) AND ! $this->authManager->is_banned(array('ip_address' => $this->session->userdata('ip_address'), 'username' => $username))){
 				# On initialise la session
@@ -100,6 +101,17 @@ class Auth extends CI_Controller {
 
 				# On remet à 0 les login fails
 				$this->authManager->clear_attempts(array('ip_address' => $this->session->userdata('ip_address'), 'username' => $username));
+
+				$this->load->helper('string');
+				
+				# Si le remember me est coché
+				if($remember_me){
+					$remember_me_hash = $username.'--'.random_string('numeric', 128);
+					set_cookie('something', $remember_me_hash, 604800, '.localhost', null, null, TRUE);
+					$this->authManager->add_hash_remember_me($username, $remember_me_hash);
+				}
+				
+				
 				redirect('dashboard/', 'refresh');
 
 			} else{

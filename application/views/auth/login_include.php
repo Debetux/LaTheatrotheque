@@ -47,7 +47,7 @@
 		<div class="row">
 			<div class="small-4" style="">
 				
-					<label for="checkbox1"><input type="checkbox" name="remember" id="checkbox1" style=""><span class="custom checkbox"></span> Se rappeller de moi.</label>
+					<label for="checkbox1"><input type="checkbox" name="remember_me" id="checkbox1" style=""><span class="custom checkbox"></span> Se rappeller de moi.</label>
 					
 			</div>
 		</div>

@@ -3,6 +3,7 @@ class Auth_model extends CI_Model {
 
 	protected $table = 'users';
 	protected $login_attempts_table = 'login_attempts';
+	protected $remember_me_table = 'remember_me_hash';
 
 	public function __construct()
 	{
@@ -111,5 +112,19 @@ class Auth_model extends CI_Model {
 
 	public function clear_attempts($params){
 		return $this->db->where($params)->delete($this->login_attempts_table);
+	}
+
+	public function add_hash_remember_me($username, $hash){
+		# On va chercher l'id de l'utilisateur
+		$row = $this->db->select('id')->from($this->table)->where(array('username' => $username))->get()->result();
+		
+		if(! empty($row[0]->id)) $user_id = $row[0]->id;
+		else $user_id = 'null';
+
+		$this->db->set('user_id',  $user_id)
+				->set('hash', md5($hash));
+
+		$this->db->set('time', time()+604800);
+		return $this->db->insert($this->remember_me_table);
 	}
 }
