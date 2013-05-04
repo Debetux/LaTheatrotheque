@@ -17,7 +17,7 @@
 
         <section class="top-bar-section">
           <ul class="left">
-            <li><?php echo anchor('#login', 'Login', 'data-reveal-id="login-box"'); ?></li>
+            <li><a>Link 1</a></li>
             <li><a href="#">Link 2</a></li>
           </ul>
 
@@ -47,16 +47,10 @@
     <!-- This has been source ordered to come first in the markup (and on small devices) but to be to the right of the nav on larger screens -->
     <div class="large-9 push-3 columns">
       
-      <h3>Page Title <small>Page subtitle</small></h3>
+      <h3><?php echo 'Bonjour '.$username.' !'; ?> <small></small></h3>
       
-      <p>Bacon ipsum dolor sit amet salami ham hock biltong ball tip drumstick sirloin pancetta meatball short loin. Venison tail chuck pork chop, andouille ball tip beef ribs flank boudin bacon. Salami andouille pork belly short ribs flank cow. Salami sirloin turkey kielbasa. Sausage venison pork loin leberkas chuck short loin, cow ham prosciutto pastrami jowl. Ham hock jerky tri-tip, fatback hamburger shoulder swine pancetta ground round. Tri-tip prosciutto meatball turkey, brisket spare ribs shankle chuck cow chicken ham hock boudin meatloaf jowl.</p>
+      <p>Voici votre tableau de bord. Vous pouvez y modifier vos informations personelles, ou bien ajouter des petites annonces, ou même ajouter des théâtres ou des pièces.</p>
  
-      <p>Ground round pastrami pork loin tenderloin jerky. Jerky spare ribs biltong, ham hock ham capicola pork. Jerky turducken pork, meatloaf sausage capicola swine corned beef turkey short loin. Tongue prosciutto pork loin, ground round spare ribs venison kielbasa strip steak.</p>
- 
-      <p>Hamburger bresaola turkey t-bone, leberkas salami pork chop ham hock beef ribs. Rump biltong meatball venison, short ribs pork loin shank shankle corned beef beef. Cow salami jowl short loin hamburger fatback. Short ribs pork belly shoulder pastrami drumstick salami corned beef ham hock bresaola. Swine filet mignon cow sausage ball tip. Cow ribeye ground round, sausage pork loin pig beef ball tip turkey boudin.</p>
- 
-      <p>Prosciutto ball tip filet mignon andouille frankfurter chicken rump sausage meatball. Filet mignon meatloaf ground round andouille ham hock pork. Bresaola short loin meatball chuck hamburger pig. Turkey venison chuck, tongue fatback tail swine jerky corned beef shank kielbasa prosciutto ribeye ham tri-tip. Rump bacon pork belly meatloaf shoulder short loin meatball kielbasa pork loin tongue bresaola brisket corned beef jowl prosciutto. Beef ribs shankle short ribs pork belly corned beef fatback pork chop tongue biltong boudin strip steak sirloin meatloaf pancetta.</p>
-            
     </div>
     
     
@@ -65,12 +59,13 @@
     <div class="large-3 pull-9 columns">
         
       <ul class="side-nav">
-        <li><a href="#">Section 1</a></li>
-        <li><a href="#">Section 2</a></li>
-        <li><a href="#">Section 3</a></li>
-        <li><a href="#">Section 4</a></li>
-        <li><a href="#">Section 5</a></li>
-        <li><a href="#">Section 6</a></li>
+        <li><a href="#">Gérer Théâtres</a></li>
+        <li><a href="#">Gérer pièces de théâtre</a></li>
+        <li><a href="#">Gérer textes</a></li>
+        <li><a href="#">Gérer news</a></li>
+        <li><a href="#">Gérer petites annonces</a></li>
+        <li><a href="#">Gérer critiques</a></li>
+        <li><a href="#">Modifier votre profil</a></li>
       </ul>
       
       <p><img src="http://placehold.it/320x240&amp;text=Ad"></p>

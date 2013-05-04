@@ -13,6 +13,7 @@ class Welcome extends CI_Controller {
 		$this->load->helper('assets');
 		$this->load->helper('captcha');
 		$this->load->library('form_validation');
+		$data['username'] = $this->session->userdata('username');
 
 		$vals = array(
 			'img_path' => './captcha/',
