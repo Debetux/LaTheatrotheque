@@ -81,6 +81,7 @@ class Auth_model extends CI_Model {
 			else $bantime_ip = 0;
 		endif;
 
+		# Un peu foireu comme systeme, mais ça marche. Je sais pas trop comment j'en suis arrivé là, mais j'ai eu une autre idée, je verrais bien.
 		if($last_attempt_user_time + $bantime_username > time() AND 
 			$last_attempt_ip_time + $bantime_ip > time() AND 
 			$last_attempt_user_time + $bantime_username == $last_attempt_ip_time + $bantime_ip) 
