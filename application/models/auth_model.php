@@ -91,9 +91,9 @@ class Auth_model extends CI_Model {
 		else $bantime = 1;
 
 		
-		if($bantime > 0) return true;
-		else return false;
-
+		#if($bantime > 0) return true;
+		#else return false;
+		return false;
 		/*if($bantime_ip == $bantime_username) return $bantime_username;
 		else return $bantime_username+$bantime_ip;
 

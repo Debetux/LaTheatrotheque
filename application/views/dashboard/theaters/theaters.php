@@ -47,10 +47,13 @@
     <!-- This has been source ordered to come first in the markup (and on small devices) but to be to the right of the nav on larger screens -->
     <div class="large-9 push-3 columns">
       
-      <h3><?php echo 'Bonjour '.$username.' !'; ?> <small></small></h3>
+      <h3>Vos théâtres <small></small></h3>
       
-      <p>Voici votre tableau de bord. Vous pouvez y modifier vos informations personelles, ou bien ajouter des petites annonces, ou même ajouter des théâtres ou des pièces.</p>
- 
+      <p><?php if(empty($user_theaters)): ?>
+          Vous n'avez ajouté aucun théâtre.
+          <?php endif; ?>
+      </p>
+      <p><?php echo anchor('dashboard/theaters/add', 'Ajouter un théâtre'); ?></p>
     </div>
     
     
@@ -59,7 +62,7 @@
     <div class="large-3 pull-9 columns">
         
       <ul class="side-nav">
-        <li><a href="<?php echo site_url('dashboard/theaters'); ?>">Gérer Théâtres</a></li>
+        <li><b><a href="<?php echo site_url('dashboard/theaters'); ?>">Gérer Théâtres</a></b></li>
         <li><a href="#">Gérer pièces de théâtre</a></li>
         <li><a href="#">Gérer textes</a></li>
         <li><a href="#">Gérer news</a></li>
