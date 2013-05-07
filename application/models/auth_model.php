@@ -62,16 +62,10 @@ class Auth_model extends CI_Model {
 			foreach ($rows->result() as $value):
 				$username_attempts++; # On incrémente à chaque fois.
 				$username_last_attempt_time = $value->time;
-				echo '<p>';
-				echo $username_attempts;
-				echo '<br/>';
-				echo $username_last_attempt_time;
-				echo '</p>';
 			endforeach;
 			# On laisse au minimum trois essais ratés. Sinon, le temps double à chaque fois.
 			if($username_attempts > 3) $bantime_username = 2*$username_attempts*60;
 			else $bantime_username = 0;
-			echo '----'.$bantime_username.'-----';
 		endif;
 
 		if(! empty($parameters['ip_address'])):
@@ -82,24 +76,14 @@ class Auth_model extends CI_Model {
 			foreach ($rows->result() as $value):
 				$ip_attempts++;
 				$ip_last_attempt_time = $value->time;
-				echo '<p>';
-				echo $ip_attempts;
-				echo '<br/>';
-				echo $ip_last_attempt_time;
-				echo '</p>';
 			endforeach;
 			if($ip_attempts > 3) $bantime_ip = 2*$ip_attempts*60; # La sanction augmente de deux minutes à chaque essai raté.
 			else $bantime_ip = 0;
-			echo '----'.$bantime_ip.'-----';
 		endif;
 
 		# On prend le plus grand bantime, pour permettre de prévenir les attaques avec des machines multiples sur un même username, ou d'une même machine sur plusieurs usernames
 		$total_bantime = ($bantime_username >= $bantime_ip) ? $bantime_username : $bantime_ip;
-		echo '<h1>'.$total_bantime.'</h1>';
 		$last_attempt = ($username_last_attempt_time > $ip_last_attempt_time) ? $username_last_attempt_time : $ip_last_attempt_time;
-		echo '<h1>'.$last_attempt.'</h1>';
-
-		if(now() < $total_bantime + $last_attempt) echo 'BANNED'; # Il est banni donc
 
 		if(now() < $total_bantime + $last_attempt) return true; # Il est banni donc
 		else return false;
@@ -131,5 +115,27 @@ class Auth_model extends CI_Model {
 
 		$this->db->set('time', time()+604800);
 		return $this->db->insert($this->remember_me_table);
+	}
+
+	public function add_captcha($data){
+		$query = $this->db->insert_string('captcha', $data);
+		$this->db->query($query);
+	}
+
+	public function verify_captacha(){
+		// First, delete old captchas
+		$expiration = time()-7200; // Two hour limit
+		$this->db->query("DELETE FROM captcha WHERE captcha_time < ".$expiration);
+
+		// Then see if a captcha exists:
+		$sql = "SELECT COUNT(*) AS count FROM captcha WHERE word = ? AND ip_address = ? AND captcha_time > ?";
+		$binds = array($_POST['captcha'], $this->input->ip_address(), $expiration);
+		$query = $this->db->query($sql, $binds);
+		$row = $query->row();
+
+		if ($row->count == 0)
+		{
+		    echo "You must submit the word that appears in the image";
+		}
 	}
 }

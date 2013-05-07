@@ -22,12 +22,12 @@ class Auth extends CI_Controller {
 		$vals = array(
 			'img_path' => './captcha/',
 			'img_url' => base_url().'captcha/',
-			'img_width' => '150',
+			'img_width' => '120',
 			'img_height' => 30,
 			'expiration' => 7200
 		);
 
-		$data['cap'] = create_captcha($vals);
+		$data['captcha'] = create_captcha($vals);
 
 		// Données
 		$this->form_validation->set_error_delimiters('<small class="error">', '</small>');

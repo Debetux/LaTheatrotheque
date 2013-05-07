@@ -110,7 +110,7 @@
 						<input type="text" id="right-label" placeholder="Recopiez les lettres ci-contre...">
 					</div>
 					<div class="large-8 columns">
-						<?php echo $cap['image']; ?>
+						<?php echo $image; ?>
 					</div>
 				</div>
 				

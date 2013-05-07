@@ -31,7 +31,7 @@ class Welcome extends CI_Controller {
 			'expiration' => 7200
 		);
 
-		$data['cap'] = create_captcha($vals);
+		$data['captcha'] = create_captcha($vals);
 
 		$this->load->view('templates/header');
 		$this->load->view('welcome_message', $data);
