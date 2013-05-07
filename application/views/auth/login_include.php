@@ -35,7 +35,7 @@
 				<div class="row">
 					
 					<div class="small-3 columns hide-for-small">
-						<label for="right-label" class="right inline<?php if(form_error('password')): ?>error<?php endif; ?>">Mot de passe</label>
+						<label for="right-label" class="right inline <?php if(form_error('password')): ?>error<?php endif; ?>">Mot de passe</label>
 					</div>
 					<div class="small-9 columns">
 						<input type="password" id="right-label" name="password" <?php if(form_error('password')): ?>class="error"<?php endif; ?> placeholder="Votre mot de passe...">
