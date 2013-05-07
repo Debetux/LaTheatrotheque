@@ -38,29 +38,25 @@
 					</div>
 
 				</div>
-				
+			<h4>Numéros de téléphones</h4>
 			<div id="phone">
-				<div class="row">
-					<div class="large-6 columns">
-						<label <?php if(form_error('phone')): ?>class="error"<?php endif; ?>>Label.</label>
-						<select id="customDropdown">
-							<option>Réservation</option>
-							<option>Contact presse</option>
-							<option>Gérant</option>
-						</select>
-					</div>
-					<div class="large-6 columns">
-						<label <?php if(form_error('phone')): ?>class="error"<?php endif; ?>>Numéro de téléphone.</label>
-						<input type="text" <?php if(form_error('phone')): ?>class="error"<?php endif; ?> name="phone" placeholder="Téléphone...">
-						<?php echo form_error('phone'); ?>
-					</div>
-				</div>
+				
 			</div>
 
 				<div class="row">
 					<div class="large-12 columns"><small><a id="add_phone" href="#">+ Ajouter un numéro de téléphone</a></small></div>
 				</div>
+				<br>
 				
+				<h4>Mails</h4>
+				<div id="mail">
+					
+				</div>
+
+				<div class="row">
+					<div class="large-12 columns"><small><a id="add_mail" href="#">+ Ajouter une adresse mail</a></small></div>
+				</div>
+
 				<br>
 				<div class="row">
 					<div class="large-12 columns">
@@ -77,7 +73,7 @@
 
   <script type="text/javascript">
 
-		$("#add_phone").live('click', function(){
+		$("#add_phone").live('click', function(e){
 			$("#phone").append('<div class="row" class="custom dropdown">'+
 					'<div class="large-6 columns">'+
 						'<select class="" id="customDropdown">'+
@@ -90,6 +86,22 @@
 						'<input type="text" name="phone" placeholder="Téléphone...">'+
 					'</div>'+
 				'</div>');
+			e.preventDefault();
 		});
-	// Du code utilisant le $() d'autres bibliothèques JS.
+
+		$("#add_mail").live('click', function(e){
+			$("#mail").append('<div class="row" class="custom dropdown">'+
+					'<div class="large-6 columns">'+
+						'<select class="" id="customDropdown">'+
+							'<option>Réservation</option>'+
+							'<option>Contact presse</option>'+
+							'<option>Gérant</option>'+
+						'</select>'+
+					'</div>'+
+					'<div class="large-6 columns">'+
+						'<input type="text" name="mail" placeholder="Email...">'+
+					'</div>'+
+				'</div>');
+			e.preventDefault();
+		});
   </script>
