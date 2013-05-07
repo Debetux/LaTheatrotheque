@@ -56,49 +56,53 @@ class Auth_model extends CI_Model {
 
 		if(! empty($parameters['username'])):
 			# On va chercher les tentatives fail avec l'username
-			$rows = $this->db->select('*')->from($this->login_attempts_table)->where(array('username' => $parameters['username']))->order_by('time', 'DESC')->get();
-			$nbr_attempts = 0;
-			$last_attempt_user_time = 0;
+			$rows = $this->db->select('*')->from($this->login_attempts_table)->where(array('username' => $parameters['username']))->order_by('time', 'ASC')->get();
+			$username_attempts = 0;
+			$username_last_attempt_time = null;
 			foreach ($rows->result() as $value):
-				$nbr_attempts++; # On incrémente à chaque fois.
-				$last_attempt_user_time = $value->time;
+				$username_attempts++; # On incrémente à chaque fois.
+				$username_last_attempt_time = $value->time;
+				echo '<p>';
+				echo $username_attempts;
+				echo '<br/>';
+				echo $username_last_attempt_time;
+				echo '</p>';
 			endforeach;
 			# On laisse au minimum trois essais ratés. Sinon, le temps double à chaque fois.
-			if($nbr_attempts > 3) $bantime_username = 2*$nbr_attempts*60;
+			if($username_attempts > 3) $bantime_username = 2*$username_attempts*60;
 			else $bantime_username = 0;
+			echo '----'.$bantime_username.'-----';
 		endif;
 
 		if(! empty($parameters['ip_address'])):
 			# On va chercher les tentatives fail avec l'username
-			$rows = $this->db->select('*')->from($this->login_attempts_table)->where(array('ip_address' => $parameters['ip_address']))->order_by('time', 'DESC')->get();
-			$nbr_attempts = 0;
-			$last_attempt_ip_time = 0;
+			$rows = $this->db->select('*')->from($this->login_attempts_table)->where(array('ip_address' => $parameters['ip_address']))->order_by('time', 'ASC')->get();
+			$ip_attempts = 0;
+			$ip_last_attempt_time = 0;
 			foreach ($rows->result() as $value):
-				$nbr_attempts++;
-				$last_attempt_ip_time = $value->time;
+				$ip_attempts++;
+				$ip_last_attempt_time = $value->time;
+				echo '<p>';
+				echo $ip_attempts;
+				echo '<br/>';
+				echo $ip_last_attempt_time;
+				echo '</p>';
 			endforeach;
-			if($nbr_attempts > 3) $bantime_ip = 2*$nbr_attempts*60;
+			if($ip_attempts > 3) $bantime_ip = 2*$ip_attempts*60; # La sanction augmente de deux minutes à chaque essai raté.
 			else $bantime_ip = 0;
+			echo '----'.$bantime_ip.'-----';
 		endif;
 
-		# Un peu foireu comme systeme, mais ça marche. Je sais pas trop comment j'en suis arrivé là, mais j'ai eu une autre idée, je verrais bien.
-		if($last_attempt_user_time + $bantime_username > time() AND 
-			$last_attempt_ip_time + $bantime_ip > time() AND 
-			$last_attempt_user_time + $bantime_username == $last_attempt_ip_time + $bantime_ip) 
-			$bantime+= 1;
-		elseif($last_attempt_user_time + $bantime_username < time() AND 
-			$last_attempt_ip_time + $bantime_ip < time()) $bantime = 0;
-		else $bantime = 1;
+		# On prend le plus grand bantime, pour permettre de prévenir les attaques avec des machines multiples sur un même username, ou d'une même machine sur plusieurs usernames
+		$total_bantime = ($bantime_username >= $bantime_ip) ? $bantime_username : $bantime_ip;
+		echo '<h1>'.$total_bantime.'</h1>';
+		$last_attempt = ($username_last_attempt_time > $ip_last_attempt_time) ? $username_last_attempt_time : $ip_last_attempt_time;
+		echo '<h1>'.$last_attempt.'</h1>';
 
-		
-		#if($bantime > 0) return true;
-		#else return false;
-		return false;
-		/*if($bantime_ip == $bantime_username) return $bantime_username;
-		else return $bantime_username+$bantime_ip;
+		if(now() < $total_bantime + $last_attempt) echo 'BANNED'; # Il est banni donc
 
-		if(empty($bantime)) return 0;
-		else return $bantime;*/
+		if(now() < $total_bantime + $last_attempt) return true; # Il est banni donc
+		else return false;
 	}
 
 	public function add_attempt($username, $ip_address){
