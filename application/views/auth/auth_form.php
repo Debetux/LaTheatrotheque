@@ -47,8 +47,7 @@
 		    <!-- Content -->
 
 			
-		<?php $this->load->view('auth/login_include'); ?>
-
+		<?php $this->load->view('auth/auth_include'); ?>
 		        
 		</div>
       </div>
@@ -77,7 +76,3 @@
     </div>
   </footer>
 
-<div id="signup-box" class="reveal-modal">
-	<?php $this->load->view('auth/sign_up_include'); ?>
-	<a class="close-reveal-modal">&#215;</a>
-</div>

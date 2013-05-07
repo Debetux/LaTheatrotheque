@@ -122,7 +122,7 @@ class Auth_model extends CI_Model {
 		$this->db->query($query);
 	}
 
-	public function verify_captacha(){
+	public function verify_captcha(){
 		// First, delete old captchas
 		$expiration = time()-7200; // Two hour limit
 		$this->db->query("DELETE FROM captcha WHERE captcha_time < ".$expiration);
