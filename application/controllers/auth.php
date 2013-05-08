@@ -13,7 +13,7 @@ class Auth extends CI_Controller {
 		$this->load->model('auth_model', 'authManager');
 
 		# Si remember_me
-		if($this->authManager->verify_hash_remember_me){ $this->session->set_userdata('username', $username); redirect(); }
+		if($this->authManager->verify_hash_remember_me()){ $this->session->set_userdata('username', $username); redirect(); }
 	}
 
 	public function index(){
@@ -111,7 +111,7 @@ class Auth extends CI_Controller {
 				# Si le remember me est coché
 				if($remember_me){
 					$remember_me_hash = $username.'--'.random_string('numeric', 128);
-					set_cookie('something', $remember_me_hash, 604800, '.localhost', null, null, TRUE);
+					set_cookie('something', $remember_me_hash, 604800, '.localhost', null, null, FALSE);
 					$this->authManager->add_hash_remember_me($username, $remember_me_hash);
 				}
 				
