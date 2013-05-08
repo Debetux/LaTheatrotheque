@@ -113,8 +113,29 @@ class Auth_model extends CI_Model {
 		$this->db->set('user_id',  $user_id)
 				->set('hash', md5($hash));
 
-		$this->db->set('time', time()+604800);
+		$this->db->set('expire_time', time()+604800);
 		return $this->db->insert($this->remember_me_table);
+	}
+
+	public function verify_hash_remember_me(){
+		$cookie = get_cookie('something', TRUE);
+		if(empty($cookie)) return false;
+
+		# Delete old remember me
+		$this->db->where('expire_time <', time())->delete($this->remember_me_table);
+
+		# Verify
+		$row = $this->db->select('id')->from($this->remember_me_table)->where(array('hash' => md5($cookie), 'expire_time >' => time()))->count_all_results();
+		if($row == 0) return false;
+		else return true;
+	}
+
+	public function unlink_remember_me(){
+		$cookie = get_cookie('something', TRUE);
+		if(empty($cookie)) return false;
+
+		# Delete
+		return $this->db->where(array('hash' => md5($cookie)))->delete($this->remember_me_table);
 	}
 
 	public function create_captcha(){

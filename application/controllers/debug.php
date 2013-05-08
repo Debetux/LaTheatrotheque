@@ -8,19 +8,7 @@ class Debug extends CI_Controller {
 
 	public function index()
 	{
-		$this->load->helper('captcha');
-		$vals = array(
-    'word' => 'Random word',
-    'img_path' => './captcha/',
-    'img_url' => 'http://example.com/captcha/',
-    'font_path' => './path/to/fonts/texb.ttf',
-    'img_width' => '150',
-    'img_height' => 30,
-    'expiration' => 7200
-    );
-
-$cap = create_captcha($vals);
-echo $cap['image'];
+		echo md5("Debetux--00364199471247461807138322110369133580635634485482812390247267180531923996062817122674409645930028554696816318446807703093817062");
 	}
 
 	public function add(){

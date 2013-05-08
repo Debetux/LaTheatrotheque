@@ -9,8 +9,11 @@ class Auth extends CI_Controller {
 		if($this->session->userdata('username')) 
 			redirect();
 
-		# Si remember_me
+		# Chargement du model
+		$this->load->model('auth_model', 'authManager');
 
+		# Si remember_me
+		if($this->authManager->verify_hash_remember_me){ $this->session->set_userdata('username', $username); redirect(); }
 	}
 
 	public function index(){
@@ -24,8 +27,6 @@ class Auth extends CI_Controller {
 		$this->load->library('form_validation');
 		$this->load->helper('assets');
 		$this->load->helper('captcha');
-		$this->load->model('auth_model', 'authManager');
-
 		
 
 		$data['captcha'] = $this->authManager->create_captcha();
@@ -82,7 +83,7 @@ class Auth extends CI_Controller {
 		//  Chargement de la bibliothèque
 		$this->load->library('form_validation');
 		$this->load->helper('assets');
-		$this->load->model('auth_model', 'authManager');
+		
 
 		// Données
 		$this->form_validation->set_error_delimiters('<small class="error">', '</small>');
@@ -136,6 +137,7 @@ class Auth extends CI_Controller {
 	}
 
 	public function logout(){
+		$this->authManager->unlink_remember_me();
 		$this->session->sess_destroy();
 		redirect();
 	}
