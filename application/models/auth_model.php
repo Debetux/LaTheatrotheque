@@ -69,7 +69,7 @@ class Auth_model extends CI_Model {
 		endif;
 
 		if(! empty($parameters['ip_address'])):
-			# On va chercher les tentatives fail avec l'username
+			# On va chercher les tentatives fail avec l'ip
 			$rows = $this->db->select('*')->from($this->login_attempts_table)->where(array('ip_address' => $parameters['ip_address']))->order_by('time', 'ASC')->get();
 			$ip_attempts = 0;
 			$ip_last_attempt_time = 0;
