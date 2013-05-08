@@ -22,16 +22,9 @@ class Welcome extends CI_Controller {
 		$this->load->helper('assets');
 		$this->load->helper('captcha');
 		$this->load->library('form_validation');
+		$this->load->model('auth_model', 'authManager');
 
-		$vals = array(
-			'img_path' => './captcha/',
-			'img_url' => base_url().'captcha/',
-			'img_width' => '150',
-			'img_height' => 30,
-			'expiration' => 7200
-		);
-
-		$data['captcha'] = create_captcha($vals);
+		$data['captcha'] = $this->authManager->create_captcha();
 
 		$this->load->view('templates/header');
 		$this->load->view('welcome_message', $data);

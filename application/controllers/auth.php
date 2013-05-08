@@ -2,6 +2,17 @@
 
 class Auth extends CI_Controller {
 
+	public function __construct(){
+		parent::__construct();
+
+		# Si connecté
+		if($this->session->userdata('username')) 
+			redirect();
+
+		# Si remember_me
+
+	}
+
 	public function index(){
 		redirect('auth/login');
 	}
@@ -15,19 +26,9 @@ class Auth extends CI_Controller {
 		$this->load->helper('captcha');
 		$this->load->model('auth_model', 'authManager');
 
-		# Si connecté
-		if($this->session->userdata('username')) 
-			redirect();
+		
 
-		$vals = array(
-			'img_path' => './captcha/',
-			'img_url' => base_url().'captcha/',
-			'img_width' => '120',
-			'img_height' => 30,
-			'expiration' => 7200
-		);
-
-		$data['captcha'] = create_captcha($vals);
+		$data['captcha'] = $this->authManager->create_captcha();
 
 		// Données
 		$this->form_validation->set_error_delimiters('<small class="error">', '</small>');
@@ -35,6 +36,7 @@ class Auth extends CI_Controller {
 		$this->form_validation->set_rules('first_name', 'prénom', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('last_name', 'nom', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('email', 'adresse mail', 'required|valid_email');
+		$this->form_validation->set_rules('captcha_word', 'captcha', 'required|xss_clean|verify_captcha');
 		
 		// Mot de passe
 		$this->form_validation->set_rules('password', 'mot de passe', 'required|matches[password_confirm]');
@@ -51,6 +53,7 @@ class Auth extends CI_Controller {
 			$first_name = $this->input->post('first_name');
 			$last_name = $this->input->post('last_name');
 			$password = $this->input->post('password');
+			//$captcha_word = $this->authManager->verify_captcha($this->input->post('captcha_word'));
 
 			if($this->authManager->add_user($username, $email, $first_name, $last_name, $password)){
 				$data['registration_complete'] = true;
@@ -60,6 +63,7 @@ class Auth extends CI_Controller {
 				$this->load->view('templates/footer');
 			} else{
 				$data['registration_failed'] = true;
+				$data['captcha_error'] = ($captcha_word) ? false : true;
 				$this->load->view('templates/header');
 				$this->load->view('auth/sign_up_form', $data);
 				$this->load->view('templates/footer');
@@ -79,10 +83,6 @@ class Auth extends CI_Controller {
 		$this->load->library('form_validation');
 		$this->load->helper('assets');
 		$this->load->model('auth_model', 'authManager');
-
-		# Si connecté
-		if($this->session->userdata('username')) 
-			redirect();
 
 		// Données
 		$this->form_validation->set_error_delimiters('<small class="error">', '</small>');

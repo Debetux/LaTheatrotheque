@@ -117,25 +117,40 @@ class Auth_model extends CI_Model {
 		return $this->db->insert($this->remember_me_table);
 	}
 
-	public function add_captcha($data){
+	public function create_captcha(){
+		$vals = array(
+			'img_path' => './captcha/',
+			'img_url' => base_url().'captcha/',
+			'img_width' => '150',
+			'img_height' => 30,
+			'expiration' => 7200
+		);
+		$captcha = create_captcha($vals);
+		$data = array(
+			'captcha_time' => $captcha['time'],
+			'ip_address' => $this->input->ip_address(),
+			'word' => $captcha['word']
+		);
+
 		$query = $this->db->insert_string('captcha', $data);
 		$this->db->query($query);
+
+		return $captcha;
 	}
 
-	public function verify_captcha(){
+	# Plus vraiment besoin, mais on laisse au cas où
+	public function verify_captcha($word){
 		// First, delete old captchas
 		$expiration = time()-7200; // Two hour limit
 		$this->db->query("DELETE FROM captcha WHERE captcha_time < ".$expiration);
 
 		// Then see if a captcha exists:
 		$sql = "SELECT COUNT(*) AS count FROM captcha WHERE word = ? AND ip_address = ? AND captcha_time > ?";
-		$binds = array($_POST['captcha'], $this->input->ip_address(), $expiration);
+		$binds = array($word, $this->input->ip_address(), $expiration);
 		$query = $this->db->query($sql, $binds);
 		$row = $query->row();
 
-		if ($row->count == 0)
-		{
-		    echo "You must submit the word that appears in the image";
-		}
+		if ($row->count == 0) return false;
+		else return true;
 	}
 }

@@ -107,7 +107,8 @@
 				<h4>Captcha <small></small></h4>
 				<div class="row">
 					<div class="large-4 columns">
-						<input type="text" id="right-label" placeholder="Recopiez les lettres ci-contre...">
+						<input type="text" id="right-label" name="captcha_word" <?php if(form_error('captcha_word')): ?>class="error"<?php endif; ?> placeholder="Recopiez les lettres ci-contre...">
+						<?php echo form_error('captcha_word'); ?>
 					</div>
 					<div class="large-8 columns">
 						<?php echo $image; ?>
