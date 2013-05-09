@@ -25,4 +25,21 @@ class MY_Form_validation extends CI_Form_validation {
 		if ($row->count == 0){ $this->set_message('verify_captcha', 'Les lettres ne correspondent pas au captcha.'); return false; }
 		else{ return true; }
 	}
+
+	# Ce sera utile pour les labels, histoire de vérifier que l'id du label existe bien.
+	/**
+	 *  Check if something exist in db
+	 *
+	 * @access	public
+	 * @param	string
+	 * @param	field
+	 * @return	bool
+	 */
+	public function exist_in_db($str, $field)
+	{
+		list($table, $field)=explode('.', $field);
+		$query = $this->CI->db->limit(1)->get_where($table, array($field => $str));
+		
+		return $query->num_rows() === 1;
+    }
 }

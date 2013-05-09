@@ -40,7 +40,26 @@
 				</div>
 			<h4>Numéros de téléphones</h4>
 			<div id="phone">
+				<?php if(! empty($all_phones)): ?>
 				
+					<?php foreach ($variable as $key => $value): ?>
+
+					<?php endforeach; ?>
+					<div class="row">
+						<div class="large-6 columns">
+							<select name="phone_label_0" id="customDropdown" nameclass="">
+								<option value="1">Réservation</option>
+								<option value="2">Contact presse</option>
+								<option value="3">Gérant</option>
+							</select>
+						</div>
+
+						<div class="large-5 columns">
+							<input type="text" placeholder="Téléphone..." name="phone_number_0">
+						</div>
+						<div class="large-1 columns"><a id="remove_row" href="#">x</a></div>
+					</div>
+				<?php endif; ?>
 			</div>
 
 				<div class="row">
@@ -77,9 +96,7 @@
 			$("#phone").append('<div class="row" class="custom dropdown">'+
 					'<div class="large-6 columns">'+
 						'<select nameclass="" id="customDropdown" name="phone_label_'+phone_iteration+'">'+
-							<?php foreach($labels as $label): ?>
-								<?php echo "'<option value=\"".$label->id."\">".$label->name."</option>'+"; ?>
-							<?php endforeach; ?>
+							<?php echo $labels_js; ?>
 						'</select>'+
 					'</div>'+
 					'<div class="large-5 columns">'+
@@ -103,9 +120,7 @@
 			$("#mail").append('<div class="row" class="custom dropdown">'+
 					'<div class="large-6 columns">'+
 						'<select class="" id="customDropdown" name="mail_label_'+phone_iteration+'">'+
-							<?php foreach($labels as $label): ?>
-								<?php echo "'<option value=\"".$label->id."\">".$label->name."</option>'+"; ?>
-							<?php endforeach; ?>
+							<?php echo $labels_js; ?>
 						'</select>'+
 					'</div>'+
 					'<div class="large-5 columns">'+
