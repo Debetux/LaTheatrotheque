@@ -10,7 +10,7 @@
 			<?php endif; ?>
 
 
-			<form action="<?php echo site_url('auth/sign_up'); ?>" class="custom" method="post">
+			<form action="<?php echo site_url('dashboard/theaters/add'); ?>" class="custom" method="post">
 				<div class="row">
 					<div class="large-6 columns">
 						<label <?php if(form_error('name')): ?>class="error"<?php endif; ?>>Nom</label>
@@ -48,7 +48,7 @@
 				</div>
 				<br>
 				
-				<h4>Mails</h4>
+			<h4>Mails</h4>
 				<div id="mail">
 					
 				</div>
