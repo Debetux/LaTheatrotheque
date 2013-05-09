@@ -22,10 +22,11 @@ class Theaters extends CI_Controller {
 
 	public function add(){
 		$this->load->helper('assets');
-
+		$this->load->model('theaters_model', 'theatersManager');
 		$this->load->library('form_validation');
 		$data['username'] = $this->session->userdata('username');
-
+		$data['form']['labels'] = $this->theatersManager->find_labels();
+		
 		$this->load->view('templates/header');
 		$this->load->view('dashboard/theaters/add', $data);
 		$this->load->view('templates/footer');

@@ -72,34 +72,47 @@
 	<script src="http://code.jquery.com/jquery-migrate-1.1.1.min.js"></script>
 
   <script type="text/javascript">
-
+  		var phone_iteration = 0;
 		$("#add_phone").live('click', function(e){
 			$("#phone").append('<div class="row" class="custom dropdown">'+
 					'<div class="large-6 columns">'+
-						'<select class="" id="customDropdown">'+
-							'<option>Réservation</option>'+
-							'<option>Contact presse</option>'+
-							'<option>Gérant</option>'+
+						'<select nameclass="" id="customDropdown" name="phone_label_'+phone_iteration+'">'+
+							<?php foreach($labels as $label): ?>
+								<?php echo "'<option value=\"".$label->id."\">".$label->name."</option>'+"; ?>
+							<?php endforeach; ?>
 						'</select>'+
 					'</div>'+
-					'<div class="large-6 columns">'+
-						'<input type="text" name="phone" placeholder="Téléphone...">'+
+					'<div class="large-5 columns">'+
+						'<input type="text" name="phone_number_'+phone_iteration+'" placeholder="Téléphone...">'+
+					'</div>'+
+					'<div class="large-1 columns">'+
+						'<a href="#" id="remove_row">x</a>'+
 					'</div>'+
 				'</div>');
+			phone_iteration++;
 			e.preventDefault();
 		});
 
+		$('#remove_row').live('click', function(e){
+			$(this).parent().parent().remove();
+			e.preventDefault();
+		});
+
+		var mail_iteration = 0;
 		$("#add_mail").live('click', function(e){
 			$("#mail").append('<div class="row" class="custom dropdown">'+
 					'<div class="large-6 columns">'+
-						'<select class="" id="customDropdown">'+
-							'<option>Réservation</option>'+
-							'<option>Contact presse</option>'+
-							'<option>Gérant</option>'+
+						'<select class="" id="customDropdown" name="mail_label_'+phone_iteration+'">'+
+							<?php foreach($labels as $label): ?>
+								<?php echo "'<option value=\"".$label->id."\">".$label->name."</option>'+"; ?>
+							<?php endforeach; ?>
 						'</select>'+
 					'</div>'+
-					'<div class="large-6 columns">'+
-						'<input type="text" name="mail" placeholder="Email...">'+
+					'<div class="large-5 columns">'+
+						'<input type="text" name="mail" name="mail_adress_'+phone_iteration+'" placeholder="Email...">'+
+					'</div>'+
+					'<div class="large-1 columns">'+
+						'<a href="#" id="remove_row">x</a>'+
 					'</div>'+
 				'</div>');
 			e.preventDefault();

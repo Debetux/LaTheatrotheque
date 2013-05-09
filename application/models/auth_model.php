@@ -133,7 +133,7 @@ class Auth_model extends CI_Model {
 	public function unlink_remember_me(){
 		$cookie = get_cookie('something', TRUE);
 		if(empty($cookie)) return false;
-
+		delete_cookie('something');
 		# Delete
 		return $this->db->where(array('hash' => md5($cookie)))->delete($this->remember_me_table);
 	}

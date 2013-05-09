@@ -49,7 +49,7 @@
       
       <h3>Ajouter un théâtre <small></small></h3>
       
-      <p><?php $this->load->view('dashboard/theaters/add_form_include.php'); ?></p>
+      <p><?php $this->load->view('dashboard/theaters/add_form_include.php', $form); ?></p>
     </div>
     
     

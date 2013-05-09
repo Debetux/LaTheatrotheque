@@ -3,6 +3,7 @@
 class Theaters_model extends CI_Model
 {
     protected $table = 'theaters';
+    protected $labels_table = 'labels';
  
     public function add_theater($name, $city, $adress, $postal_code, $phone)
     {
@@ -61,6 +62,10 @@ class Theaters_model extends CI_Model
                 ->order_by('id', 'desc')
                 ->get()
                 ->result();
+    }
+
+    public function find_labels(){
+        return $this->db->select('*')->from($this->labels_table)->order_by('id', 'ASC')->get()->result();
     }
 }
  
