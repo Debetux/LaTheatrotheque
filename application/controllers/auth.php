@@ -7,13 +7,19 @@ class Auth extends CI_Controller {
 
 		# Si connecté
 		if($this->session->userdata('username')) 
-			redirect();
+			redirect('dashboard/', 'refresh');
 
 		# Chargement du model
 		$this->load->model('auth_model', 'authManager');
 
 		# Si remember_me
-		if($this->authManager->verify_hash_remember_me()){ $this->session->set_userdata('username', $username); redirect(); }
+		if($this->authManager->verify_hash_remember_me()){
+			$cookie = get_cookie('something', TRUE);
+			$cookie = explode('--', $cookie);
+			$username = $cookie[0];
+			$this->session->set_userdata('username', $username); 
+			redirect('dashboard/', 'refresh'); 
+		}
 	}
 
 	public function index(){

@@ -38,36 +38,37 @@ class Theaters extends CI_Controller {
 		$data['form']['labels_html'] = null; # ...et aussi dans le code html. Mais sera sûrement inutile pour le moment.
 
 		# On s'occupe de générer les listes de labels.
-		foreach ($data['form']['labels'] as $key => $value) {
+		foreach ($data['form']['labels'] as $key => $label) {
 			$data['form']['labels_js'] .= "'<option value=\"".$label->id."\">".$label->name."</option>'+";
 		}
 
 		# On s'occupe des numéros de téléphone et des mails par des expressions régulières avec une boucle foreach :
 		if(!empty($_POST)){
+			$matches = null; # Pour stocker les numéros des téléphones/mails.
 			foreach ($_POST as $key => $value) {
 				# Mails
 				# On vérifie d'abbord la $key pour déterminer si c'était censé être un numéro de téléphone ou un mail
-				if(preg_match('#mail_adress_[0-9]*#', $key)){
-					if(preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $value)){
-						$mails[] = $value;
+				if(preg_match('#mail_adress_([0-9]*)#', $key, $matches)){
+					if(preg_match("#^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$#ix", $value)){
+						$mails[$matches[1]] = $value;
 					} else{
-						$mail_errors[$key] = $value;
+						$mail_errors[$matches[1]] = $value;
 					}
-					$all_mails[$key] = $value;
+					$all_mails[$matches[1]] = $value;
 				}
 				# On stocke le label pour bien tout matcher
-				if(preg_match('#mail_label_[0-9]*#', $key)) $all_mails_labels[$key] = $value;
+				if(preg_match('#mail_label_([0-9]*)#', $key, $matches)) $all_mails_labels[$matches[1]] = $value;
 
 				# Comme on validera automatiquement les numéros de téléphone, il faut juste savoir si il y a des chiffres 
-				if(preg_match('#phone_number_[0-9]*#', $key)){
-					if(preg_match('\+?([0-9]{2})-?([0-9]{3})-?([0-9]{6,7})', $value)){
-						$phone_numbers[] = $value;
+				if(preg_match('#phone_number_([0-9]*)#', $key, $matches)){
+					if(preg_match('#^(01|02|03|04|05|06|07|08|09)[0-9]{8}$#', $value)){
+						$phone_numbers[$matches[1]] = $value;
 					} else{
-						$phone_errors[] = $key;
+						$phone_errors[$matches[1]] = $key;
 					}
-					
+					$all_phones[$matches[1]] = $value;
 				}
-				if(preg_match('#phone_label_[0-9]*#', $key)) $all_phones_labels[$key] = $value;
+				if(preg_match('#phone_label_([0-9]*)#', $key, $matches)) $all_phones_labels[$matches[1]] = $value;
 			}
 		}
 
@@ -79,9 +80,12 @@ class Theaters extends CI_Controller {
 			$data['form']['all_mails'] = (empty($all_mails)) ? null : $all_mails;
 			$data['form']['all_mails_labels'] = (empty($all_mails_labels)) ? null : $all_mails_labels;
 			$data['form']['mail_errors'] = (empty($mail_errors)) ? null : $mail_errors;
+			$data['form']['mail_sucess'] = (empty($mails)) ? null : $mails;
+
 			$data['form']['all_phones'] = (empty($all_phones)) ? null : $all_phones;
-			$data['form']['all_phones_labels'] = (empty($all_phones_labels) ? null : $all_phones_labels;
+			$data['form']['all_phones_labels'] = (empty($all_phones_labels)) ? null : $all_phones_labels;
 			$data['form']['phone_errors'] = (empty($phone_errors)) ? null : $phone_errors;
+			$data['form']['phone_sucess'] = (empty($phone_numbers)) ? null : $phone_numbers;
 
 			$this->load->view('templates/header');
 			$this->load->view('dashboard/theaters/add', $data);
