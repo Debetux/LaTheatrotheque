@@ -4,6 +4,8 @@ class Theaters_model extends CI_Model
 {
     protected $table = 'theaters';
     protected $labels_table = 'labels';
+    protected $phones_table = 'theaters_phones';
+    protected $mails_table = 'theaters_mails';
  
     public function add_theater($name, $city, $adress, $postal_code, $phone)
     {
@@ -66,6 +68,32 @@ class Theaters_model extends CI_Model
 
     public function find_labels(){
         return $this->db->select('*')->from($this->labels_table)->order_by('id', 'ASC')->get()->result();
+    }
+
+    public function add_phones_and_emails($contacts){
+        foreach ($contacts as $value) {
+            if(preg_match("#^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$#ix", $value)){
+                $this->add_mail($value['data']);
+            }
+            elseif(preg_match('#^(01|02|03|04|05|06|07|08|09)[0-9]{8}$#', $value)){
+                $this->add_phone($value['data']);
+            }
+        }
+    }
+
+    public function add_phone($phones){
+         return $this->db->set('name',   $name)
+                    ->set('city',   $city)
+                ->set('adress', $adress)
+                ->set('postal_code', $postal_code)
+                ->set('phone', $phone)
+                ->set('date_added', 'NOW()', false)
+                ->set('date_modified', 'NOW()', false)
+                ->insert($this->table);
+    }
+
+    public function add_mail($mails){
+
     }
 }
  

@@ -74,7 +74,7 @@ class Theaters extends CI_Controller {
 
 		// Validation du formulaire
 		if($this->form_validation->run() AND empty($phone_errors) AND empty($mail_errors)){
-
+			
 		} else{
 			# On vérifie si il y a des erreurs :
 			$data['form']['all_mails'] = (empty($all_mails)) ? null : $all_mails;
