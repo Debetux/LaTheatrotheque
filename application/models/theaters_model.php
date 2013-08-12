@@ -7,15 +7,14 @@ class Theaters_model extends CI_Model
     protected $phones_table = 'theaters_phones';
     protected $mails_table = 'theaters_mails';
  
-    public function add_theater($name, $city, $adress, $postal_code, $phone)
+    public function add_theater($name, $city, $address, $postal_code)
     {
         return $this->db->set('name',   $name)
                     ->set('city',   $city)
-                ->set('adress', $adress)
+                ->set('address', $address)
                 ->set('postal_code', $postal_code)
-                ->set('phone', $phone)
-                ->set('date_added', 'NOW()', false)
-                ->set('date_modified', 'NOW()', false)
+                ->set('created_at', 'NOW()', false)
+                ->set('updated_at', 'NOW()', false)
                 ->insert($this->table);
     }
      
@@ -56,7 +55,7 @@ class Theaters_model extends CI_Model
                       ->count_all_results($this->table);
     }
 
-    public function list_theater($nb = 10, $debut = 0)
+    public function list_theaters($nb = 10, $debut = 0)
     {
         return $this->db->select('*')
                 ->from($this->table)
@@ -84,7 +83,7 @@ class Theaters_model extends CI_Model
     public function add_phone($phones){
          return $this->db->set('name',   $name)
                     ->set('city',   $city)
-                ->set('adress', $adress)
+                ->set('address', $address)
                 ->set('postal_code', $postal_code)
                 ->set('phone', $phone)
                 ->set('date_added', 'NOW()', false)

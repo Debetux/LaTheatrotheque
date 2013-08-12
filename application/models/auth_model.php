@@ -147,6 +147,9 @@ class Auth_model extends CI_Model {
 			'expiration' => 7200
 		);
 		$captcha = create_captcha($vals);
+
+		// $captcha['time'] = time();
+		// $captcha['word'] = '123456';
 		$data = array(
 			'captcha_time' => $captcha['time'],
 			'ip_address' => $this->input->ip_address(),

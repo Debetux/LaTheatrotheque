@@ -6,14 +6,17 @@ class Theaters extends CI_Controller {
 		parent::__construct();
 		if(! $this->session->userdata('username')) 
 			redirect('auth/login');
+		$this->output->enable_profiler(TRUE);
+		$this->load->helper('assets');
+		$this->load->model('theaters_model', 'theatersManager');
+		$this->load->library('form_validation');
 	}
 
 	public function index()
 	{
-		$this->load->helper('assets');
-		$this->load->helper('captcha');
-		$this->load->library('form_validation');
+
 		$data['username'] = $this->session->userdata('username');
+		$data['user_theaters'] = $this->theatersManager->list_theaters();
 
 		$this->load->view('templates/header');
 		$this->load->view('dashboard/theaters/theaters', $data);
@@ -21,16 +24,13 @@ class Theaters extends CI_Controller {
 	}
 
 	public function add(){
-		$this->load->helper('assets');
-		$this->load->model('theaters_model', 'theatersManager');
-		$this->load->library('form_validation');
 
 		// Données
 		$this->form_validation->set_error_delimiters('<small class="error">', '</small>');
-		$this->form_validation->set_rules('name', 'nom du théâtre', 'trim|required|min_length[2]|max_length[100]|alpha_dash|encode_php_tags|xss_clean|is_unique[theaters.name]');
+		$this->form_validation->set_rules('name', 'nom du théâtre', 'trim|required|min_length[2]|max_length[100]|encode_php_tags|xss_clean|is_unique[theaters.name]');
 		$this->form_validation->set_rules('city', 'ville', 'trim|required|xss_clean|max_length[100]');
 		$this->form_validation->set_rules('postal_code', 'code postal', 'trim|required|xss_clean|exact_length[5]');
-		$this->form_validation->set_rules('adress', 'adresse mail', 'required|xss_clean|encode_php_tags|max_length[140]');
+		$this->form_validation->set_rules('address', 'adresse', 'required|xss_clean|encode_php_tags|max_length[140]');
 
 		$data['username'] = $this->session->userdata('username');
 		$data['form']['labels'] = $this->theatersManager->find_labels();
@@ -48,7 +48,7 @@ class Theaters extends CI_Controller {
 			foreach ($_POST as $key => $value) {
 				# Mails
 				# On vérifie d'abbord la $key pour déterminer si c'était censé être un numéro de téléphone ou un mail
-				if(preg_match('#mail_adress_([0-9]*)#', $key, $matches)){
+				if(preg_match('#mail_address_([0-9]*)#', $key, $matches)){
 					if(preg_match("#^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$#ix", $value)){
 						$mails[$matches[1]] = $value;
 					} else{
@@ -74,7 +74,11 @@ class Theaters extends CI_Controller {
 
 		// Validation du formulaire
 		if($this->form_validation->run() AND empty($phone_errors) AND empty($mail_errors)){
-			
+			$theater_name = $this->input->post('name');
+			$theater_city = $this->input->post('city');
+			$theater_address = $this->input->post('address');
+			$theater_postal_code = $this->input->post('postal_code');
+			$this->theatersManager->add_theater($theater_name, $theater_city, $theater_address, $theater_postal_code);
 		} else{
 			# On vérifie si il y a des erreurs :
 			$data['form']['all_mails'] = (empty($all_mails)) ? null : $all_mails;

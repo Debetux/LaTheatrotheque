@@ -32,9 +32,9 @@
 
 				<div class="row">
 					<div class="large-12 columns">
-						<label <?php if(form_error('adress')): ?>class="error"<?php endif; ?>>Adresse</label>
-						<input type="text" <?php if(form_error('adress')): ?>class="error"<?php endif; ?> name="adress" value="<?php echo set_value('adress'); ?>" placeholder="43 rue des Olivers">
-						<?php echo form_error('adress'); ?>
+						<label <?php if(form_error('address')): ?>class="error"<?php endif; ?>>Adresse</label>
+						<input type="text" <?php if(form_error('address')): ?>class="error"<?php endif; ?> name="address" value="<?php echo set_value('address'); ?>" placeholder="43 rue des Olivers">
+						<?php echo form_error('address'); ?>
 					</div>
 
 				</div>
@@ -85,7 +85,7 @@
 									</select>
 								</div>
 								<div class="large-5 columns">
-									<input type="text" value="<?php echo $mail_value; ?>" name="mail_adress_<?php echo $mail_key; ?>" placeholder="Email...">
+									<input type="text" value="<?php echo $mail_value; ?>" name="mail_address_<?php echo $mail_key; ?>" placeholder="Email...">
 									<?php if(! empty($mail_errors[$mail_key])) echo '<small class="error">L\'adresse email est invalide..</small>'; ?>
 								</div>					
 								<div class="large-1 columns">
@@ -143,17 +143,18 @@
 		$("#add_mail").live('click', function(e){
 			$("#mail").append('<div class="row" class="custom dropdown">'+
 					'<div class="large-6 columns">'+
-						'<select class="" id="customDropdown" name="mail_label_'+phone_iteration+'">'+
+						'<select class="" id="customDropdown" name="mail_label_'+mail_iteration+'">'+
 							<?php echo $labels_js; ?>
 						'</select>'+
 					'</div>'+
 					'<div class="large-5 columns">'+
-						'<input type="text" name="mail_adress_'+phone_iteration+'" placeholder="Email...">'+
+						'<input type="text" name="mail_address_'+mail_iteration+'" placeholder="Email...">'+
 					'</div>'+
 					'<div class="large-1 columns">'+
 						'<a href="#" id="remove_row">x</a>'+
 					'</div>'+
 				'</div>');
+			mail_iteration++;
 			e.preventDefault();
 		});
   </script>

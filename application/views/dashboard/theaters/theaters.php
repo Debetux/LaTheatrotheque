@@ -46,54 +46,29 @@
     <!-- Main Content Section -->
     <!-- This has been source ordered to come first in the markup (and on small devices) but to be to the right of the nav on larger screens -->
     <div class="large-9 push-3 columns">
-      
+
       <h3>Vos théâtres <small></small></h3>
       
-      <p><?php if(empty($user_theaters)): ?>
-          Vous n'avez ajouté aucun théâtre.
-          <?php endif; ?>
-      </p>
+      <?php if(empty($user_theaters)): ?>
+          <p>Vous n'avez ajouté aucun théâtre.</p>
+      <?php else: ?>
+        <div class="row">
+          <?php foreach($user_theaters as $theater): ?>
+          
+
+            <div class="large-4 small-6 columns">
+                  <img src="http://placehold.it/1000x1000&amp;text=Thumbnail">
+
+                  <div class="panel">
+                    <h5><?php echo $theater->name; ?></h5>
+                    <h6 class="subheader"><?php echo $theater->address.', '.$theater->postal_code.', '.$theater->city; ?></h6>
+                  </div>
+                </div>
+
+          
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
+
       <p><?php echo anchor('dashboard/theaters/add', 'Ajouter un théâtre'); ?></p>
     </div>
-    
-    
-    <!-- Nav Sidebar -->
-    <!-- This is source ordered to be pulled to the left on larger screens -->
-    <div class="large-3 pull-9 columns">
-        
-      <ul class="side-nav">
-        <li><b><a href="<?php echo site_url('dashboard/theaters'); ?>">Gérer Théâtres</a></b></li>
-        <li><a href="#">Gérer pièces de théâtre</a></li>
-        <li><a href="#">Gérer textes</a></li>
-        <li><a href="#">Gérer news</a></li>
-        <li><a href="#">Gérer petites annonces</a></li>
-        <li><a href="#">Gérer critiques</a></li>
-        <li><a href="#">Modifier votre profil</a></li>
-      </ul>
-      
-      <p><img src="http://placehold.it/320x240&amp;text=Ad"></p>
-        
-    </div>
-    
-  </div>
-
-    <!-- Footer -->
-
-  <footer class="row">
-    <div class="large-12 columns">
-      <hr>
-      <div class="row">
-        <div class="large-6 columns">
-          <p>&copy; Copyright no one at all. Go to town.</p>
-        </div>
-        <div class="large-6 columns">
-          <ul class="inline-list right">
-            <li><a href="#">Link 1</a></li>
-            <li><a href="#">Link 2</a></li>
-            <li><a href="#">Link 3</a></li>
-            <li><a href="#">Link 4</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </footer>
