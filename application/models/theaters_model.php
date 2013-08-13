@@ -13,8 +13,8 @@ class Theaters_model extends CI_Model
                     ->set('city',   $city)
                 ->set('address', $address)
                 ->set('postal_code', $postal_code)
-                ->set('created_at', 'NOW()', false)
-                ->set('updated_at', 'NOW()', false)
+                ->set('created_at', time(), false)
+                ->set('updated_at', time(), false)
                 ->insert($this->table);
     }
      
